@@ -6,6 +6,7 @@ The objective of this experiment is to evaluate the **robustness of the ESP-base
 
 The experiment tests whether covertly transmitted data can be **successfully reconstructed** at the receiver when a fraction of ESP packets are randomly dropped by the network.
 
+
 ---
 
 ## 2. Experimental Setup
@@ -18,8 +19,45 @@ The experiment tests whether covertly transmitted data can be **successfully rec
 * **Test File:** `secret.txt`
 
 ---
+Great catch — this is **exactly** the kind of clarification examiners and readers look for 👍
+I’ll answer in two parts:
 
-## 3. Packet Loss Injection
+1. **What “X% packet loss” means (README-ready explanation)**
+2. **Exactly where to put it in your existing README (best placement + why)**
+
+---
+
+## 3. Packet Loss Percentage Interpretation
+
+In this experiment, packet loss is introduced using the Linux `tc netem` queuing discipline.
+
+A packet loss rate of **X%** means that:
+
+> On average, **X out of every 100 transmitted packets** are randomly dropped by the network before reaching the receiver.
+
+For example:
+
+* **1% packet loss** → approximately 1 packet dropped per 100 packets
+* **3% packet loss** → approximately 3 packets dropped per 100 packets
+* **5% packet loss** → approximately 5 packets dropped per 100 packets
+
+Packet loss is applied **independently and randomly** to each packet.
+There is no guarantee which specific packets are dropped, and consecutive losses may occur.
+
+In this experiment:
+
+* Exactly **1000 ESP packets** are transmitted per run
+* Expected dropped packets are approximately:
+
+  * ~10 packets at 1% loss
+  * ~30 packets at 3% loss
+  * ~50 packets at 5% loss
+
+Actual packet loss may vary slightly due to randomness, as observed in receiver statistics.
+
+---
+
+## 4. Packet Loss Injection
 
 Packet loss is introduced on the **sender VM** using Linux Traffic Control (`tc`) with the `netem` queuing discipline.
 
@@ -44,7 +82,7 @@ tc qdisc show dev enp1s0
 
 ---
 
-## 4. Covert File Transmission (Sender Side)
+## 5. Covert File Transmission (Sender Side)
 
 The sender uses `sender1.py` to transmit a file covertly over ESP packets.
 
@@ -74,7 +112,7 @@ This hash is later used to verify integrity at the receiver.
 
 ---
 
-## 5. Receiver Operation
+## 6. Receiver Operation
 
 The receiver uses `receiver1.py` to:
 
@@ -92,7 +130,7 @@ sudo python3 receiver1.py
 
 ---
 
-## 6. Experimental Results
+## 7. Experimental Results
 
 The experiment is repeated three times under increasing packet loss rates.
 
@@ -146,7 +184,7 @@ The experiment is repeated three times under increasing packet loss rates.
 
 ---
 
-## 7. Observations
+## 8. Observations
 
 * Increasing packet loss reduces the number of received ESP packets
 * ESP integrity verification remains intact for all received packets
@@ -156,7 +194,7 @@ The experiment is repeated three times under increasing packet loss rates.
 
 ---
 
-## 8. Interpretation
+## 9. Interpretation
 
 This experiment demonstrates that the covert channel is **robust to moderate packet loss**:
 
@@ -169,7 +207,7 @@ The design naturally tolerates packet loss due to repeated chunk embedding.
 
 ---
 
-## 9. Conclusion
+## 10. Conclusion
 
 The robustness experiment confirms that:
 
@@ -182,7 +220,7 @@ This strengthens the practicality of ESP padding as a resilient covert communica
 
 ---
 
-## 10. Reproducibility Notes
+## 11. Reproducibility Notes
 
 To reproduce this experiment:
 
