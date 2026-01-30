@@ -1,6 +1,6 @@
 # Entropy Analysis of ESP-Based Covert Channel
 
-## 1 Objective
+## 1. Objective
 
 The objective of this experiment is to evaluate whether embedding covert data inside the **ESP padding field** introduces statistically detectable differences in packet randomness.
 
@@ -13,7 +13,7 @@ If the covert channel is stealthy, the entropy of both traffic streams should re
 
 ---
 
-## 2 Experimental Setup
+## 2. Experimental Setup
 
 * **Sender VM:** Generates ESP packets (baseline or covert mode)
 * **Receiver VM:** Captures ESP traffic and performs entropy analysis
@@ -22,7 +22,7 @@ If the covert channel is stealthy, the entropy of both traffic streams should re
 
 ---
 
-## 3 Traffic Generation (Sender Side)
+## 3. Traffic Generation (Sender Side)
 
 The sender uses a modified ESP packet generator (`sender2.py`) to produce high-volume ESP traffic.
 
@@ -57,7 +57,7 @@ sudo python3 sender2.py --covert
 
 ---
 
-## 4 Traffic Capture (Receiver Side)
+## 4. Traffic Capture (Receiver Side)
 
 On the receiver VM, ESP packets are captured using `tcpdump`.
 
@@ -77,7 +77,7 @@ These captures contain **only ESP packets**, ensuring analysis is limited to enc
 
 ---
 
-## 5 Entropy Analysis Pipeline
+## 5. Entropy Analysis Pipeline
 
 Entropy analysis is automated using the script `entropy_test.sh`, executed on the receiver VM.
 
@@ -100,7 +100,7 @@ Generated files include:
 
 ---
 
-## 6 Sample Output
+## 6. Sample Output
 
 Representative entropy results are shown below.
 
@@ -120,7 +120,7 @@ Both traffic streams exhibit entropy values close to the theoretical maximum of 
 
 ---
 
-## 7 Observations
+## 7. Observations
 
 * Baseline and covert ESP traffic show **nearly identical entropy**
 * No statistically significant entropy increase is observed in covert traffic
@@ -143,7 +143,7 @@ This supports the feasibility of ESP padding as a **stealthy covert communicatio
 
 ---
 
-## 9 Conclusion
+## 9. Conclusion
 
 This experiment demonstrates that:
 
@@ -154,7 +154,7 @@ This experiment demonstrates that:
 
 ---
 
-## 10 Reproducibility Notes
+## 10. Reproducibility Notes
 
 To reproduce this experiment:
 
