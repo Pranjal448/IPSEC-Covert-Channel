@@ -160,13 +160,13 @@ Both programs operate directly at the packet level and communicate over the isol
 
 ---
 
-### 5.2 Libraries Used
+#### 5.2 Libraries Used
 
 This project relies on a combination of **packet manipulation** and **cryptographic** libraries to manually construct, transmit, encrypt, decrypt, and analyze ESP packets.
 
 ---
 
-#### Scapy
+##### Scapy
 
 **Used in:** `sender.py`, `receiver.py`
 
@@ -183,7 +183,7 @@ Scapy enables full control over packet structure, which is essential for impleme
 
 ---
 
-#### PyCryptodome (Cryptodome)
+##### PyCryptodome (Cryptodome)
 
 **Used in:** `sender.py`, `receiver.py`
 
@@ -243,7 +243,7 @@ Cryptodome.Random.get_random_bytes
 
 ---
 
-## 🧠 Why These Libraries Were Chosen
+##### 🧠 Why These Libraries Were Chosen
 
 * **Scapy** enables low-level packet control not possible with standard socket APIs
 * **PyCryptodome** provides reliable and standardized cryptographic primitives
