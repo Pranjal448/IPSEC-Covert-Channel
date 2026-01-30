@@ -98,7 +98,7 @@ The experiment is repeated three times under increasing packet loss rates.
 
 ---
 
-### 6.1 1% Packet Loss
+### 1% Packet Loss
 
 **Receiver statistics:**
 
@@ -114,7 +114,7 @@ The experiment is repeated three times under increasing packet loss rates.
 
 ---
 
-### 6.2 3% Packet Loss
+### 3% Packet Loss
 
 **Receiver statistics:**
 
@@ -130,7 +130,7 @@ The experiment is repeated three times under increasing packet loss rates.
 
 ---
 
-### 6.3 5% Packet Loss
+### 5% Packet Loss
 
 **Receiver statistics:**
 
