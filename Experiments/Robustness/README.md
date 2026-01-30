@@ -1,4 +1,4 @@
-# 7. Robustness Analysis under Packet Loss
+# Robustness Analysis under Packet Loss
 
 ## 1. Objective
 
