@@ -147,6 +147,10 @@ The experiment is repeated three times under increasing packet loss rates.
 
 **Integrity check:**
 
+```bash
+Original SHA-256    = 5bb35ea40fa62f692892283aef8ff2a8799bf329798f651d1cbc9d64503ad244
+Reconstructed SHA-256 = 5bb35ea40fa62f692892283aef8ff2a8799bf329798f651d1cbc9d64503ad244
+```
 * Original SHA-256 = Reconstructed SHA-256
 * No data corruption observed
 
@@ -163,6 +167,10 @@ The experiment is repeated three times under increasing packet loss rates.
 
 **Integrity check:**
 
+```bash
+Original SHA-256    = 5bb35ea40fa62f692892283aef8ff2a8799bf329798f651d1cbc9d64503ad244
+Reconstructed SHA-256 = 5bb35ea40fa62f692892283aef8ff2a8799bf329798f651d1cbc9d64503ad244
+```
 * Original SHA-256 = Reconstructed SHA-256
 * Covert data fully recovered despite higher loss
 
@@ -179,6 +187,10 @@ The experiment is repeated three times under increasing packet loss rates.
 
 **Integrity check:**
 
+```bash
+Original SHA-256    = 5bb35ea40fa62f692892283aef8ff2a8799bf329798f651d1cbc9d64503ad244
+Reconstructed SHA-256 = 5bb35ea40fa62f692892283aef8ff2a8799bf329798f651d1cbc9d64503ad244
+```
 * Original SHA-256 = Reconstructed SHA-256
 * Covert channel remains functional under significant loss
 
