@@ -1,17 +1,15 @@
 # IPSEC-Covert-Channel
 
-Perfect 👍
-Below is **direct README-style content** — no explanations, no commentary. You can paste this straight into `README.md`.
 
----
+## Virtual Machine Setup and Network Configuration
 
-# Virtual Machine Setup and Network Configuration
-
-## 1. Overview
+### 1. Overview
 
 This project was developed and tested using a virtualized environment to ensure isolation, reproducibility, and controlled networking. Two Ubuntu virtual machines were created on a single Ubuntu host system using native Linux virtualization tools.
 
 ---
+
+// steps to open virtual machine
 
 ## 2. Host System Details
 
@@ -25,7 +23,7 @@ This project was developed and tested using a virtualized environment to ensure 
 
 ## 3. Virtual Machine Creation
 
-Two separate Ubuntu virtual machines were created to simulate a multi-node setup.
+Two separate Ubuntu virtual machines were created to simulate a multi-node setup. One VM acts as sender VM, other acts as a receiver VM.
 
 ### 3.1 Guest Operating Systems
 
@@ -37,10 +35,8 @@ Two separate Ubuntu virtual machines were created to simulate a multi-node setup
 ### 3.2 Common VM Configuration
 
 * **CPU:** 1 vCPU
-* **Memory:** 1–2 GB RAM
-* **Disk:** 20 GB (QCOW2 format)
-* **Installation Medium:** Ubuntu ISO image
-* **Firmware:** BIOS (default)
+* **Memory:** 5.6 GiB
+* **Disk:** 25 GB (QCOW2 format)
 
 Each virtual machine was installed independently using the standard Ubuntu installer.
 
@@ -50,88 +46,102 @@ Each virtual machine was installed independently using the standard Ubuntu insta
 
 ### 4.1 Network Type
 
-Both virtual machines were connected using the **default NAT-based virtual network** provided by `libvirt`.
+A custom isolated virtual IPv6 network named **covert** was created using libvirt via virt-manager. This network is attached to both virtual machines to provide private inter-VM communication while remaining isolated from the host system and external networks.
 
-Key characteristics:
-
-* Virtual bridge: `virbr0`
-* Private subnet: `192.168.122.0/24`
-* IP assignment: DHCP
-* Internet access: Enabled via NAT
-* VM-to-VM communication: Enabled
-
-The host system acts as a DHCP server and network gateway for the virtual machines.
 
 ---
 
-### 4.2 IP Address Verification
+### 4.2 Manual IPv6 Configuration Using `link.sh`
 
-Inside each virtual machine, network details were verified using:
+#### Overview
+
+Each virtual machine uses a shell script named `link.sh` to manually configure IPv6 networking on the isolated virtual network (`covert`).
+The script is executed inside the VM to assign a **static IPv6 address** to the network interface, enabling deterministic and reproducible communication between the two VMs.
+
+This approach avoids reliance on automatic IPv6 mechanisms such as SLAAC or DHCPv6.
+
+---
+
+#### Purpose of `link.sh`
+
+The `link.sh` script performs the following high-level tasks:
+
+1. Activates the network interface attached to the isolated network
+2. Assigns a predefined static IPv6 address to the interface
+3. Verifies the IPv6 configuration
+4. Prepares the VM for IPv6-based communication with the peer VM
+
+Separate scripts are used on each VM, with unique IPv6 addresses assigned to prevent conflicts.
+
+---
+
+#### Sender VM (VM1)
+
+* **Network Interface:** `enp1s0`
+* **Assigned IPv6 Address:** `2001:db8:100::10/64`
+* **Role:** Acts as the sender in IPv6 communication tests
+
+After configuration, VM1 is able to initiate IPv6 connectivity checks (e.g., ICMPv6 echo requests) to VM2.
+
+---
+
+#### Receiver VM (VM2)
+
+* **Network Interface:** `enp1s0`
+* **Assigned IPv6 Address:** `2001:db8:100::20/64`
+* **Role:** Acts as the receiver in IPv6 communication tests
+
+VM2 listens for incoming IPv6 traffic and can also initiate connectivity checks to VM1.
+
+---
+
+#### IPv6 Addressing Scheme
+
+* **IPv6 Prefix:** `2001:db8:100::/64`
+* **Address Type:** Static
+* **Purpose:** Experimental / documentation-only IPv6 addressing
+
+Using static addresses ensures predictable endpoints and simplifies testing and analysis.
+
+---
+
+#### Execution and Usage
+
+The script is executed manually on each VM:
 
 ```bash
-ip a
+chmod +x link.sh
+./link.sh
 ```
 
-or
-
-```bash
-ifconfig
-```
-
-Example output:
-
-```
-inet 192.168.122.101/24
-```
-
-This confirms successful assignment of an IP address within the virtual network.
+Once executed on both VMs, IPv6 connectivity can be verified using `ping6` between the assigned addresses.
 
 ---
 
-## 5. Connectivity Testing
+#### Design Considerations
 
-### 5.1 VM-to-VM Communication
-
-Connectivity between the two virtual machines was verified using ICMP echo requests.
-
-```bash
-ping <IP_of_other_VM>
-```
-
-Successful replies confirmed correct network connectivity.
+* Ensures full control over IPv6 addressing
+* Avoids dynamic address assignment variability
+* Suitable for isolated and secure VM environments
+* Configuration is temporary and applies only for the current session
+* Keeps permanent network configuration unchanged
 
 ---
 
-### 5.2 VM-to-Host Communication
+#### Outcome
 
-```bash
-ping 192.168.122.1
-```
+After running `link.sh` on both virtual machines:
 
-This address corresponds to the host-side interface of the virtual bridge.
-
----
-
-## 6. Rationale for Virtualized Setup
-
-* Provides a controlled and isolated testing environment
-* Eliminates dependency on physical hardware
-* Ensures easy reproducibility of experiments
-* Allows realistic simulation of networked systems
+* Each VM has a unique, known IPv6 address
+* IPv6 communication is enabled over the isolated network
+* VM-to-VM connectivity can be reliably tested
 
 ---
 
-## 7. References
+#### Note
 
-* virt-manager Documentation: [https://virt-manager.org/documentation/](https://virt-manager.org/documentation/)
-* libvirt Networking: [https://libvirt.org/formatnetwork.html](https://libvirt.org/formatnetwork.html)
-* Ubuntu Virtualization Guide: [https://ubuntu.com/server/docs/virtualization](https://ubuntu.com/server/docs/virtualization)
+The IPv6 configuration applied by `link.sh` is **non-persistent** and must be re-applied after a reboot. Persistent configuration would require changes to the system’s network configuration files (e.g., netplan).
 
 ---
 
-If you want, next we can add:
-
-* **Step-by-step virt-manager screenshots section**
-* **Static IP configuration**
-* **Firewall rules (ufw / iptables)**
-* **Exact commands used (audit-style README)**
+####
